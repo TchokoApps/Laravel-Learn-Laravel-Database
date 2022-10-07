@@ -15,7 +15,7 @@ class ReservationSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('reservations')->truncate();
+        DB::table('reservations')->delete();
 
         $reservations = [];
 
@@ -25,6 +25,7 @@ class ReservationSeeder extends Seeder
             $reservations[] = [
                 'user_id' => $faker->numberBetween(1,5),
                 'room_id'=> $faker->numberBetween(1,10),
+                'city_id'=> $faker->numberBetween(1,2),
                 'check_in'=>$faker->dateTimeBetween('-10 days', 'now'),
                 'check_out'=>$faker->dateTimeBetween('now', '+10 days'),
                 'created_at' => now(),

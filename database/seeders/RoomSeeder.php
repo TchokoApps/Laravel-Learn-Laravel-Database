@@ -15,7 +15,7 @@ class RoomSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('comments')->truncate();
+        DB::table('rooms')->delete();
 
         $rooms = [];
 

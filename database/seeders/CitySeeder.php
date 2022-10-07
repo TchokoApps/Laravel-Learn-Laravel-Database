@@ -6,7 +6,7 @@ use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CommentSeeder extends Seeder
+class CitySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,22 +15,20 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('comments')->delete();
+        DB::table('cities')->delete();
 
-        $comments = [];
+        $cities = [];
 
         $faker = Faker::create();
 
-        foreach (range(1, 10) as $value) {
-            $comments[] = [
-                'content' => $faker->text(1000),
-                'rating' => $faker->numberBetween(1,5),
-                'user_id'=> $faker->numberBetween(1,5),
+        foreach (range(1, 3) as $value) {
+            $cities[] = [
+                'name' => $faker->unique()->city(),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
 
-        DB::table('comments')->insert($comments);
+        DB::table('cities')->insert($cities);
     }
 }

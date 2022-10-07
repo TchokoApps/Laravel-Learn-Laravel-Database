@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\Comment;
+use App\Models\Room;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,10 +85,79 @@ Route::get('/', function () {
 //    dump($results);
 
     //    Result: select * from `users` where exists (select `id` from `reservations` where reservations.user_id=users.id and `check_in` = '2020-05-30' limit 1)
-    $results = DB::table('users')->whereExists(function ($query) {
-        $query->select('id')->from('reservations')->whereRaw('reservations.user_id=users.id')->where('check_in', '=', '2020-05-30')->limit(1);
-    })->get();
-    dump($results);
+//    $results = DB::table('users')->whereExists(function ($query) {
+//        $query->select('id')->from('reservations')->whereRaw('reservations.user_id=users.id')->where('check_in', '=', '2020-05-30')->limit(1);
+//    })->get();
+//    dump($results);
+
+//    Result: select * from `comments` limit 3 offset 0
+//    $result = DB::table('comments')->paginate(3);
+//    dump($result);
+
+//    Result: select * from `comments` where `content` like '%Voluptatem%'
+//    $result = DB::table('comments')->where("content", 'like',"%Voluptatem%")->get();
+//    dump($result);
+
+    //    Result: elect * from `comments` where content LIKE '%Voluptatem%'
+//    $result = DB::table('comments')->whereRaw("content LIKE '%Voluptatem%'")->get();
+//    dump($result);
+
+//    $result = DB::table('comments')->selectRaw('count(user_id) as number_of_comments, users.name')
+//        ->join('users', 'users.id', '=', 'comments.user_id')->groupBy('user_id')->get();
+//    dump($result);
+
+//    Result: select * from `users` order by `name` desc
+//    $result = DB::table('users')->orderBy('name', 'desc')->get();
+//    dump($result);
+
+    //    Result: select * from `users` order by `name` desc
+//    $result = DB::table('comments')->selectRaw('count(id) as num_of_5stars_comments, rating')
+//        ->groupBy('rating')->having('rating', '=', 5)->get();
+//    dump($result);
+
+//    Result: select * from `reservations` where `room_id` = 1
+//    $room_id = 1;
+//    $result = DB::table('reservations')->when($room_id, function ($query, $room_id) {
+//        return $query->where('room_id', $room_id);
+//    })->get();
+//    dump($result);
+
+//    Result: select * from `rooms` order by `room_number` asc
+//    $sortBy = 'room_number';
+//    $result = DB::table('rooms')->when($sortBy, function ($query, $sortBy) {
+//        return $query->orderBy($sortBy);
+//    })->get();
+//    dump($result);
+
+//    $result = DB::table('comments')->orderBy('id')->chunk(2, function ($comments) {
+//        foreach ($comments as $comment) {
+//            if ($comment->id == 5) return false;
+//        }
+//    });
+
+//    Result: select * from `reservations` inner join `rooms` on `reservations`.`room_id` = `rooms`.`id` inner join `users` on `reservations`.`user_id` = `users`.`id` where `rooms`.`id` > 3 and `users`.`id` > '1'
+//    $result = DB::table('reservations')
+//        ->join('rooms', 'reservations.room_id', '=', 'rooms.id')
+//        ->join('users', 'reservations.user_id', '=', 'users.id')
+//        ->where('rooms.id', '>', 3)
+//        ->where('users.id', '>', '1')
+//        ->get();
+//    dump($result);
+
+//  Result: select * from `rooms` where `room_size` = 3
+//    Room::get(); get all records
+//    Room::all(); get all records, common way
+//    $result = Room::where('room_size', 3)->get();
+//    dump($result);
+
+//    Result: select * from `rooms` where `price` < 400
+//    $result = Room::where('price', '<', 400)->get();
+//    dump($result);
+
+//    Result: select `users`.*, (select `rating` from `comments` where `user_id` = `users`.`id` order by `rating` asc limit 1) as `worst_rating` from `users` where `name` = 'email'
+    $result = User::where('name', 'email')->addSelect(['worst_rating' => Comment::select('rating')
+        ->whereColumn('user_id', 'users.id')->orderBy('rating', 'asc')->limit(1)])->get();
+    dump($result);
 
 
     return view('welcome');
