@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\City;
 use App\Models\Comment;
 use App\Models\Room;
 use App\Models\User;
@@ -155,10 +156,21 @@ Route::get('/', function () {
 //    dump($result);
 
 //    Result: select `users`.*, (select `rating` from `comments` where `user_id` = `users`.`id` order by `rating` asc limit 1) as `worst_rating` from `users` where `name` = 'email'
-    $result = User::where('name', 'email')->addSelect(['worst_rating' => Comment::select('rating')
-        ->whereColumn('user_id', 'users.id')->orderBy('rating', 'asc')->limit(1)])->get();
-    dump($result);
+//    $result = User::where('name', 'email')->addSelect(['worst_rating' => Comment::select('rating')
+//        ->whereColumn('user_id', 'users.id')->orderBy('rating', 'asc')->limit(1)])->get();
+//    dump($result);
 
+//    $result = User::find(1);
+//    dump($result->address);
 
+//    select * from `users` where `users`.`id` = 1 limit 1
+//    select * from `comments` where `comments`.`user_id` = 1 and `comments`.`user_id` is not null
+//    $result = User::find(1);
+//    dump($result->comments);
+
+//    select * from `cities` where `cities` . `id` = 1 limit 1
+//    select `rooms` .*, `city_room` . `city_id` as `pivot_city_id`, `city_room` . `room_id` as `pivot_room_id` from `rooms` inner join `city_room` on `rooms` . `id` = `city_room` . `room_id` where `city_room` . `city_id` = 1
+    $result = City::find(1);
+    dump($result->rooms);
     return view('welcome');
 });

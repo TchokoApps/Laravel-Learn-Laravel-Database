@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Post;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class CommentSeeder extends Seeder
+class PostSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,23 +15,22 @@ class CommentSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('comments')->delete();
+        DB::table('posts')->delete();
 
-        $comments = [];
+        $posts = [];
 
         $faker = Faker::create();
 
-        foreach (range(1, 60) as $value) {
-            $comments[] = [
-                'content' => $faker->text(5),
-                'rating' => $faker->numberBetween(1, 5),
+        for ($i = 1; $i < 10; $i++) {
+            $posts[] = [
+                'title' => $faker->text(20),
+                'content' => $faker->text(1000),
                 'user_id' => $faker->numberBetween(1, 5),
-                'post_id' => $faker->numberBetween(1, 10),
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
 
-        DB::table('comments')->insert($comments);
+        DB::table('posts')->insert($posts);
     }
 }
